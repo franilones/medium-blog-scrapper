@@ -2,6 +2,7 @@ package com.franilones.medium_blog_scrapper.application.service;
 
 import com.franilones.medium_blog_scrapper.application.services.PostService;
 import com.franilones.medium_blog_scrapper.domain.model.Post;
+import com.franilones.medium_blog_scrapper.domain.ports.output.PortsScrapperOutputPort;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,9 +17,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class PostServiceTest {
-
     @Mock
-    private PostScrapperOutputPort scrapperPort;
+    private PortsScrapperOutputPort scrapperPort;
 
     @InjectMocks
     private PostService postService;
@@ -32,9 +32,10 @@ public class PostServiceTest {
         Post post3 = Post.builder().publishDate(LocalDateTime.now()).build();
 
         //  When
-        when(scrapperPort.fetchPosts()).thenReturn(List.of(post1, post2, post3));
+        String username = "franilones";
+        when(scrapperPort.fetchPostsByUsername(username)).thenReturn(List.of(post1, post2, post3));
 
-        List<Post> result = postService.getLatestPosts();
+        List<Post> result = postService.getLatestPosts(username);
 
         //  Then
         assertAll(
