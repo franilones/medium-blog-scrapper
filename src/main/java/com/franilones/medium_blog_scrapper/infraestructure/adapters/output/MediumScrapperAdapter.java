@@ -5,8 +5,6 @@ import com.franilones.medium_blog_scrapper.domain.ports.DocumentFetcher;
 import com.franilones.medium_blog_scrapper.domain.ports.output.PortsScrapperOutputPort;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
@@ -21,7 +19,6 @@ import java.util.stream.Collectors;
 @Component
 public class MediumScrapperAdapter implements PortsScrapperOutputPort {
 
-//    private static final Logger log = LoggerFactory.getLogger(MediumScrapperAdapter.class);
     private static final DateTimeFormatter MEDIUM_DATE_TIME_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
 
     private final DocumentFetcher documentFetcher;
@@ -49,7 +46,6 @@ public class MediumScrapperAdapter implements PortsScrapperOutputPort {
 
     public List<Post> parseHtml(Document doc) {
         List<Element> articles = doc.select("article");
-        log.info("Número de artículos encontrados: {}", articles.size());
 
         List<Post> postMapped = articles.stream()
                 .map(this::parsePost)
@@ -100,38 +96,35 @@ public class MediumScrapperAdapter implements PortsScrapperOutputPort {
 
     private int extractClaps(Element article) {
         try {
-            Element clapsElement = article.select("a > div:first-child .n > .n.o.nu > svg + span").first();
+            Element clapsElement = article.select(".ab.q.oy > svg + span").first();
             if (clapsElement == null) {
                 log.debug("Elemento de claps no encontrado");
                 return 0;
             }
-            int claps = Integer.parseInt(clapsElement.text().replaceAll("[^0-9]", ""));
+            int claps = Integer.parseInt(clapsElement.text().trim());
             log.debug("Claps extraídos: {}", claps);
             return claps;
         } catch (NumberFormatException e) {
-            log.error("Error al convertir claps a número: {}",  e);
+            log.error("Error al convertir claps a número: ",  e);
             return 0;
         }
     }
 
-    private LocalDateTime extractPublishDate(Element article) {
+    private String extractPublishDate(Element article) {
         try {
-            Element time = article.select(".m.ba .n.o.be > .hg.n + span").first();
-            if (time == null) {
+            Element timeElement = article.select(".ab.q.af > .mj.ab + span").first();
+            if (timeElement == null) {
                 log.warn("Elemento de fecha no encontrado");
-                return LocalDateTime.now();
+                return LocalDateTime.now().toString();
             }
 
-            String datetime = time.attr("datetime");
-            log.debug("Fecha cruda extraída: {}", datetime);
+            String date = timeElement.text();
+            log.debug("Fecha cruda extraída: {}", date);
 
-            LocalDateTime parsedDate = LocalDateTime.parse(datetime, MEDIUM_DATE_TIME_FORMATTER);
-            log.debug("Fecha parseada: {}", parsedDate);
-
-            return parsedDate;
+            return date;
         } catch (DateTimeParseException e) {
-            log.error("Error al parsear fecha: {}", e);
-            return LocalDateTime.now();
+            log.error("Error al parsear fecha: ", e);
+            return LocalDateTime.now().toString();
         }
     }
 }

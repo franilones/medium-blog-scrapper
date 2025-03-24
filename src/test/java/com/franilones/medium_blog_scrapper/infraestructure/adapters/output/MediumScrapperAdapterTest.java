@@ -39,15 +39,15 @@ public class MediumScrapperAdapterTest {
                 <a>
                     <div>
                         <div class="n">
-                            <div class="n o nu">
+                            <div class="ab q oy">
                                 <svg></svg><span>150</span>
                             </div>
                         </div>
                     </div>
                 </a>
-                <div class="n o be">
-                    <div class="hg n"></div>
-                    <span datetime="2024-03-15T10:00:00Z">15 Mar</span>
+                <div class="ab q af">
+                    <div class="mj ab"></div>
+                    <span>Sep 10, 2023</span>
                 </div>
             </article>
         """;
@@ -63,7 +63,7 @@ public class MediumScrapperAdapterTest {
                 () -> assertEquals("test-image.jpg", post.getImageUrl()),
                 () -> assertEquals("Test summary", post.getSummary()),
                 () -> assertEquals(150, post.getClaps()),
-                () -> assertTrue(post.getPublishDate().toString().startsWith("2024-03-15T10:00"))
+                () -> assertEquals("Sep 10, 2023", post.getPublishDate())
         );
     }
 }

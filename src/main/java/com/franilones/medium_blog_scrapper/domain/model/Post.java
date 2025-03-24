@@ -15,6 +15,6 @@ public class Post {
     public String title;
     public String imageUrl;
     public String summary;
-    public LocalDateTime publishDate;
+    public String publishDate;
     public int claps;
 }
