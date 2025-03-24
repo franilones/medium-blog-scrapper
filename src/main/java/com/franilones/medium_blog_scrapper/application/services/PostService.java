@@ -14,7 +14,7 @@ public class PostService {
 
     private final PortsScrapperOutputPort scrapperPort;
 
-    public List<Post> getLatestPosts(String username) {
+    public List<Post> getPostsByUsername(String username) {
         return scrapperPort.fetchPostsByUsername(username).stream()
                 .sorted(Comparator.comparing(Post::getPublishDate).reversed())
                 .toList();

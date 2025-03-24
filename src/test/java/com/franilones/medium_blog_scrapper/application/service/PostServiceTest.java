@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,7 +36,7 @@ public class PostServiceTest {
         String username = "franilones";
         when(scrapperPort.fetchPostsByUsername(username)).thenReturn(List.of(post1, post2, post3));
 
-        List<Post> result = postService.getLatestPosts(username);
+        List<Post> result = postService.getPostsByUsername(username);
 
         //  Then
         assertAll(
@@ -49,5 +50,6 @@ public class PostServiceTest {
                         "El post más antiguo debe estar último"
                 )
         );
+        verify(scrapperPort).fetchPostsByUsername(username);
     }
 }
