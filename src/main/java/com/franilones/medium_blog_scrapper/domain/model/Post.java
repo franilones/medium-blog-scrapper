@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -13,8 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Post {
     public String title;
+    public String postUrl;
     public String imageUrl;
     public String summary;
     public String publishDate;
-    public int claps;
 }
